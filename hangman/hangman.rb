@@ -1,9 +1,11 @@
-require "json"
-require "pry-byebug"
+# frozen_string_literal: true
+
+require 'json'
+require 'pry-byebug'
 
 class Hangman
-  SAVE_FILE = "hangman_save.json"
-  DICTIONARY_FILE = "google-10000-english-no-swears.txt"
+  SAVE_FILE = 'hangman_save.json'
+  DICTIONARY_FILE = 'google-10000-english-no-swears.txt'
   MAX_ATTEMPTS = 6
 
   def initialize
@@ -16,13 +18,13 @@ class Hangman
 
   def select_random_word
     lines = File.readlines(DICTIONARY_FILE)
-    words = lines.map { |line| line.chomp }
+    words = lines.map(&:chomp)
     filtered_words = words.select { |word| word.length.between?(6, 12) }
-    random_word = filtered_words.sample
+    filtered_words.sample
   end
 
   def display_word
-    word = @secret_word.chars.map { |char| @guessed_letter.include?(char) ? char : "_" }.join
+    @secret_word.chars.map { |char| @guessed_letter.include?(char) ? char : '_' }.join
     #  "__d_e__"
   end
 
@@ -42,7 +44,7 @@ class Hangman
     end
   end
 
-  def to_json
+  def to_json(*_args)
     obj = {}
     instance_variables.map do |var|
       obj[var] = instance_variable_get(var)
@@ -61,20 +63,25 @@ class Hangman
   # end
 
   def save_game
-    File.open(SAVE_FILE, "w") do |file|
-      file.write(to_json)
-    end
+    File.write(SAVE_FILE, to_json)
   end
+
+  # def save_game
+  #   File.write(SAVE_FILE,to_json)
+  # end
 
   def load_game
     if File.exist?(SAVE_FILE)
       data = JSON.parse(File.read(SAVE_FILE))
-      data.keys.each do |key|
+      # to see value of @secret_word after reading and parsing
+      # word = data["@secret_word"]
+      # binding.pry
+      data.each_key do |key|
         instance_variable_set(key, data[key])
       end
-      puts "Game loaded!"
+      puts 'Game loaded!'
     else
-      puts "No saved game found."
+      puts 'No saved game found.'
     end
   end
 
@@ -93,35 +100,32 @@ class Hangman
   # end
 
   def play
-    puts "Welcome to Hangman"
+    puts 'Welcome to Hangman'
     loop do
       display_status
-      puts "Please guess the letter or type save to save the game"
+      puts 'Please guess the letter or type save to save the game'
       input = gets.chomp
-      if input == "save"
+      if input == 'save'
         save_game
       elsif input.length == 1 && input.match(/[a-zA-Z]/)
         guessed_letter(input)
       else
-        puts "Invalid input please enter alphabet"
+        puts 'Invalid input please enter alphabet'
       end
 
-      if @attempts == 0
+      if @attempts.zero?
         puts "You lost the game. The correct word was #{@secret_word}"
         break
       elsif display_word == @secret_word
         puts "You won the game . The word was #{@secret_word}"
         break
-      else
       end
     end
   end
 end
 
 game = Hangman.new
-puts "Do you want to load the save game? yes/no"
+puts 'Do you want to load the save game? yes/no'
 response = gets.chomp.downcase
-if response == "yes"
-  game.load_game
-end
+game.load_game if response == 'yes'
 game.play

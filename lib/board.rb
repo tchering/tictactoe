@@ -6,7 +6,7 @@ class Board
   WINNING_COMBOS = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
-    [6, 4, 2], [0, 4, 8],
+    [6, 4, 2], [0, 4, 8]
   ].freeze
 
   def initialize
@@ -15,9 +15,9 @@ class Board
 
   def display_board
     puts " #{cells[0]} | #{cells[1]} | #{cells[2]} "
-    puts "____________"
+    puts '____________'
     puts " #{cells[3]} | #{cells[4]} | #{cells[5]} "
-    puts "____________"
+    puts '____________'
     puts " #{cells[6]} | #{cells[7]} | #{cells[8]} "
   end
 

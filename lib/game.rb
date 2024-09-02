@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "display"
+require_relative 'display'
 
 class Game
   include DisplayMessage
@@ -66,6 +66,17 @@ class Game
       player_response
     end
   end
+# using loop for player_response method
+#   def player_response
+#     loop do
+#       input = gets.chomp
+#       if input.match?(/^[1-9]$/)
+#         return input.to_i
+#       else
+#         display_input_warning
+#       end
+#     end
+#   end
 
   def make_move(input, symbol)
     board.update_board(input, symbol)

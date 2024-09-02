@@ -42,10 +42,10 @@ module DisplayMessage
   end
 
   def display_tie
-    puts "The game is draw."
+    puts 'The game is draw.'
   end
 
   def display_cell_occupied
-    puts "The cell you selected is occupied"
+    puts 'The cell you selected is occupied'
   end
 end
